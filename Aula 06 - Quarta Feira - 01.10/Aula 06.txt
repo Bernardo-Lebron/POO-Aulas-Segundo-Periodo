@@ -1,0 +1,3 @@
+Aula 06 - Quarta Feira - 01.10
+
+1º Trabalho em grupo: Implementação de métodos de pagamento em um código passado pelo professor - Linguagem Java -
