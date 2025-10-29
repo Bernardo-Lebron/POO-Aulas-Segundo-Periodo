@@ -1,4 +1,4 @@
-public public class ItemPedido {
+public class ItemPedido{
     private Produto produto;
     private int quantidade;
     private float totalPedido;
@@ -20,7 +20,4 @@ public public class ItemPedido {
     public float getValorPedido() {
         return totalPedido;
     }
-}
- {
-    
 }
