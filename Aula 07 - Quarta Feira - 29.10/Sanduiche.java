@@ -13,5 +13,8 @@ public class Sanduiche extends Produto {
     public String getTipo() {
         return tipo;
     }
-}
 
+    public List<Ingrediente> getIngredientes() {
+        return ingredientes;
+    }
+}

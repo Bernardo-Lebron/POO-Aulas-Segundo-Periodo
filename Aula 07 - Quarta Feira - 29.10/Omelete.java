@@ -7,4 +7,9 @@ public class Omelete extends Produto {
         super(nome, preco);
         this.ingredientes = ingredientes;
     }
+
+    public List<Ingrediente> getIngredientes() {
+        return ingredientes;
+    }
 }
+
