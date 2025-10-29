@@ -1,6 +1,6 @@
 import java.util.*;  
 
-public class Main {
+public class abc {
     
     // Interface base para opções de menu
     public interface MenuOption {
