@@ -24,17 +24,22 @@ public class PedidoService {
         float total = 0f;
         if (pedido.getItens() != null) {
             for (ItemPedido item : pedido.getItens()) {
-                if (item.getProduto() != null && item.getProduto().getPreco() != null) {
-                    float subtotal = item.getProduto().getPreco() * item.getQuantidade();
-                    item.setTotalPedido(subtotal);
-                    item.setPedido(pedido);
-                    total += subtotal;
+                if (item.getProduto() != null) {
+                    Float preco = item.getProduto().getPreco();
+                    if (preco != null) {
+                        float subtotal = preco * item.getQuantidade();
+                        item.setTotalPedido(subtotal);
+                        item.setPedido(pedido);
+                        total += subtotal;
+                    }
                 }
             }
         }
         pedido.setValorFinal(total);
         pedido.setDataHora(LocalDateTime.now());
-        if (pedido.getStatus() == null) pedido.setStatus("EM_ABERTO");
+        if (pedido.getStatus() == null) {
+            pedido.setStatus("EM_ABERTO");
+        }
         return pedidoRepository.save(pedido);
     }
 
@@ -43,6 +48,8 @@ public class PedidoService {
     }
 
     public void deletar(Long id) {
-        pedidoRepository.deleteById(id);
+        if (pedidoRepository.existsById(id)) {
+            pedidoRepository.deleteById(id);
+        }
     }
 }
