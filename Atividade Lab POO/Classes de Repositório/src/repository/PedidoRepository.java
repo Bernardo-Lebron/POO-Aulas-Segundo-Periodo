@@ -1,7 +1,10 @@
+package repository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import model.Pedido;
 
 public class PedidoRepository {
     private Map<String, Pedido> pedidos = new HashMap<>(); 

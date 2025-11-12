@@ -1,3 +1,4 @@
+package model;
 public abstract class Produto {
     protected String nome;
     protected float preco;

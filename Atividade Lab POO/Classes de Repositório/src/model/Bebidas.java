@@ -1,3 +1,4 @@
+package model;
 public class Bebidas extends Produto {
     private String tipo;
     private String tamanho;

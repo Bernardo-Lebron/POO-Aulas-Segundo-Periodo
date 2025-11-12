@@ -1,7 +1,10 @@
+package repository;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import model.Ingrediente;
 
 public class IngredienteRepository {
     private Map<String, Ingrediente> ingredientes = new HashMap<>(); 
