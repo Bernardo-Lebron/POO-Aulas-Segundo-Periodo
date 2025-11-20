@@ -1,0 +1,24 @@
+1 - "O loop principal (o for each) precisou ser alterado para fazer a YWing se mover e atirar? Por que não?"
+
+    - Não. Porque ele usa polimorfismo através de ponteiros para a classe base (NaveEspacial).
+
+2 - "Por que foi melhor adicionar escudos na NaveEspacial (classe mãe) em vez de adicionar separadamente na XWing e na YWing?"
+
+    - Porque todas as naves têm escudos, então o comportamento é comum. Logo, pertence à classe mãe, não às subclasses.
+
+3 - "Por que usamos uma Interface (IHiperdrive) e não um Método Abstrato (saltarParaHiperespaco) na classe NaveEspacial?"
+
+    - Porque nem toda nave pode saltar para o hiperespaço.
+
+4 - "Por que a XWing compôs um DroideAstromech (tem-um) em vez de herdar dele (é-um)?"
+
+    - Porque uma XWing não é um droide. Ela tem um droide.
+
+5 - "Como o compilador sabe qual construtor do TIEFighter chamar, já que ambos têm o mesmo nome?"
+
+    - Por sobrecarga de funções. O compilador escolhe o construtor baseado na assinatura dos parâmetros, não no nome.
+
+Bônus - "Por que acessamos NaveEspacial.getTotalNavesCriadas() (pela classe) e não luke.getTotalNavesCriadas() (por um objeto)?"
+
+    - Porque totalNavesCriadas é um membro static, ou seja, pertence à classe inteira, não a uma instância específica.
+Logo, o acesso pela classe deixa explícito que existe uma única cópia compartilhada entre todas as naves.
