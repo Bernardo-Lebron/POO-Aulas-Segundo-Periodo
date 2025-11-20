@@ -107,7 +107,6 @@ public:
     int getEnergia() const {
         return this->energia;
     }
-
 };
 
 int NaveEspacial::totalNavesCriadas = 0;
@@ -139,7 +138,6 @@ public:
  * * : public NaveEspacial (Equivalente ao 'extends' do Java)
  */
 class XWing : public NaveEspacial, public IHiperdrive {
-
 private:
     DroideAstromech droide; 
 
@@ -192,7 +190,6 @@ public:
     void ativarEscudosDefletores() {
         std::cout << getNome() << " ativa escudos defletores!" << std::endl;
     }
-
 };
 
 
@@ -435,4 +432,3 @@ int main() {
     std::cout << "\nSimulacao terminada. Destrutores automaticos sendo chamados." << std::endl;
     return 0; // Fim do programa
 }
-
