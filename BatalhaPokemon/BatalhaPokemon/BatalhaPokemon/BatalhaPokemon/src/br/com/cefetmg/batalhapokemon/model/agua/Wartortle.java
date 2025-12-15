@@ -9,7 +9,7 @@ public class Wartortle extends Squirtle {
     public Wartortle(String apelido) {
         super(apelido); 
         setEspecie("Wartortle"); 
-        setNivelEvolucao(2);    
+        setNivelEvolucao(2);
         setVidaMaxima(300);
         setVida(300);         
         setAtaque(80);
