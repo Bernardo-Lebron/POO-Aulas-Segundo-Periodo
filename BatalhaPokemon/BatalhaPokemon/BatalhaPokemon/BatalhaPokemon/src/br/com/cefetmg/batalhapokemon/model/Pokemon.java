@@ -27,7 +27,8 @@ public abstract class Pokemon {
 
     private List<Ataque> ataques = new ArrayList<>();
 
-    public Pokemon(String apelido, String especie, Tipo tipo, int nivelEvolucao, double vidaMaxima, double ataque, double defesa, double velocidade) {
+    public Pokemon(String apelido, String especie, Tipo tipo, int nivelEvolucao,
+                   double vidaMaxima, double ataque, double defesa, double velocidade) {
         this.apelido = apelido;
         this.especie = especie;
         this.tipo = tipo;
@@ -46,29 +47,24 @@ public abstract class Pokemon {
 
         double multiplicador = Tipo.obterMultiplicador(golpe.tipo(), oponente.getTipo());
 
-        // Feedback visual e Cálculo de XP
-        int xpGanho = 20; // XP Neutro padrão
+        int xpGanho = 20;
         if (multiplicador > 1.0) {
             System.out.println("Foi super efetivo!");
             xpGanho = 30;
         } else if (multiplicador < 1.0 && multiplicador > 0) {
             System.out.println("Não foi muito efetivo...");
             xpGanho = 10;
-        } else if (multiplicador == 0.0) { // Adicionando feedback para Imune
+        } else if (multiplicador == 0.0) {
             System.out.println("Não teve efeito!");
             xpGanho = 5;
         } else {
             System.out.println("Dano normal.");
         }
-        
-        // --- CÁLCULO DE DANO CORRIGIDO ---
-        // Fórmula: (Atk * Poder / 20) * Multiplicador - (Def / 3) 
-        double danoBase = (this.ataque * (double) golpe.poder() / 20);
-        
-        // Aplica o multiplicador ao dano base antes de descontar a defesa
-        double danoComMultiplicador = danoBase * multiplicador; 
 
-        // Desconta a defesa, garantindo que o dano mínimo seja 1 (a menos que seja imune)
+        // --- CÁLCULO DE DANO ---
+        double danoBase = (this.ataque * golpe.poder() / 20.0);
+        double danoComMultiplicador = danoBase * multiplicador;
+
         double danoReal;
         if (multiplicador == 0.0) {
             danoReal = 0.0;
@@ -76,22 +72,31 @@ public abstract class Pokemon {
             danoReal = Math.max(1, danoComMultiplicador - (oponente.getDefesa() / 3));
         }
 
+        // --- LÓGICA DE DEFESA ---
+        boolean defendeu = Math.random() < 0.35; // 35% de chance
+        if (defendeu && danoReal > 0) {
+            danoReal *= 0.2; // recebe apenas 20% do dano
+            System.out.println(oponente.getApelido() + " se defendeu! O dano foi reduzido.");
+        }
+
         oponente.receberDano(danoReal);
 
-        // Lógica de Recompensa (Poção e XP)
+        // Recompensas
         this.contadorAtaquesBemSucedidos++;
         if (this.contadorAtaquesBemSucedidos % 2 == 0) {
             this.pocoes++;
-            System.out.println("" + this.apelido + " ganhou uma Poção de Cura por bons ataques!");
+            System.out.println(this.apelido + " ganhou uma Poção de Cura por bons ataques!");
         }
 
         ganharExperiencia(xpGanho);
     }
 
-    
     public void receberDano(double dano) {
         this.vida -= dano;
-        System.out.printf("%s recebeu %.1f de dano. (VIDA: %.1f/%.1f)%n", this.apelido, dano, Math.max(0, this.vida), this.vidaMaxima);
+        System.out.printf(
+            "%s recebeu %.1f de dano. (VIDA: %.1f/%.1f)%n",
+            this.apelido, dano, Math.max(0, this.vida), this.vidaMaxima
+        );
     }
 
     public boolean usarPocao() {
@@ -100,7 +105,10 @@ public abstract class Pokemon {
             double cura = 20.0;
             this.vida += cura;
             if (this.vida > this.vidaMaxima) this.vida = this.vidaMaxima;
-            System.out.printf(" %s usou uma poção! Recuperou %.1f VIDA. (Restam %d poções)%n", this.apelido, cura, this.pocoes);
+            System.out.printf(
+                " %s usou uma poção! Recuperou %.1f VIDA. (Restam %d poções)%n",
+                this.apelido, cura, this.pocoes
+            );
             return true;
         } else {
             System.out.println("Você não tem poções!");
@@ -112,35 +120,33 @@ public abstract class Pokemon {
 
     private void ganharExperiencia(int xp) {
         this.experiencia += xp;
-        System.out.printf("%s ganhou %d XP. (Total: %d/50)%n", this.apelido, xp, this.experiencia);
+        System.out.printf(
+            "%s ganhou %d XP. (Total: %d/50)%n",
+            this.apelido, xp, this.experiencia
+        );
     }
 
-    /**
-     * Verifica se deve evoluir. Se sim, retorna a NOVA instância.
-     * Se não, retorna 'this' (a própria instância atual).
-     */
     public Pokemon tentarEvoluir() {
         if (this.experiencia >= 50 && this.nivelEvolucao < 3) {
-            System.out.println("\nO QUE? " + this.apelido + " ESTÁ EVOLUINDO! ");
-            Pokemon evoluido = evoluir(); // Método abstrato implementado pelos filhos
+            System.out.println("\nO QUE? " + this.apelido + " ESTÁ EVOLUINDO!");
+            Pokemon evoluido = evoluir();
 
-            // Transfere o estado importante
             evoluido.pocoes = this.pocoes;
-            // Reseta XP ou transfere excedente (opcional, aqui reseta para o novo nível)
             evoluido.experiencia = 0;
 
-            // Mantém a porcentagem de vida atual ou cura? Vamos curar na evolução (bônus)
             System.out.println(" " + this.apelido + " se tornou um " + evoluido.especie + "!\n");
             return evoluido;
         }
         return this;
     }
 
-    // Métodos abstratos e auxiliares
+    // Métodos abstratos
     public abstract Pokemon evoluir();
     public abstract void realizarSom();
 
-    public void adicionarAtaque(Ataque a) { ataques.add(a); }
+    public void adicionarAtaque(Ataque a) {
+        ataques.add(a);
+    }
 
     // Getters
     public boolean estaVivo() { return vida > 0; }
@@ -153,40 +159,18 @@ public abstract class Pokemon {
     public int getNivelEvolucao() { return nivelEvolucao; }
     public int getPocoes() { return pocoes; }
     public double getVida() { return vida; }
-    public double getVidaMaxima() { return this.vidaMaxima; }
-    public void setVidaMaxima(double vidaMaxima) { 
-        this.vidaMaxima = vidaMaxima; 
-    }
-    public void setEspecie(String especie) { 
-        this.especie = especie; 
-    }
+    public double getVidaMaxima() { return vidaMaxima; }
 
-    public void setNivelEvolucao(int nivelEvolucao) { 
-        this.nivelEvolucao = nivelEvolucao; 
-    }
-
-    public void setVida(double vida) { 
-        this.vida = vida; 
-    }
-
-    public void setAtaque(double ataque) { 
-        this.ataque = ataque; 
-    }
-
-    public void setDefesa(double defesa) { 
-        this.defesa = defesa; 
-    }
-
-
-    // Construtor protegido para cópia de dados na evolução
-    protected void copiarDados(Pokemon antigo) {
-        this.pocoes = antigo.pocoes;
-        // Vida enche na evolução
-    }
+    // Setters
+    public void setVidaMaxima(double vidaMaxima) { this.vidaMaxima = vidaMaxima; }
+    public void setEspecie(String especie) { this.especie = especie; }
+    public void setNivelEvolucao(int nivelEvolucao) { this.nivelEvolucao = nivelEvolucao; }
+    public void setVida(double vida) { this.vida = vida; }
+    public void setAtaque(double ataque) { this.ataque = ataque; }
+    public void setDefesa(double defesa) { this.defesa = defesa; }
 
     @Override
     public String toString() {
         return "Pokemon: " + apelido + " (" + especie + ") | VIDA: " + vida + "/" + vidaMaxima;
     }
-
 }
