@@ -73,7 +73,7 @@ public abstract class Pokemon {
         }
 
         // --- LÓGICA DE DEFESA ---
-        boolean defendeu = Math.random() < 0.35; // 35% de chance
+        boolean defendeu = Math.random() < 0.35; // 35% de chance de defesa
         if (defendeu && danoReal > 0) {
             danoReal *= 0.2; // recebe apenas 20% do dano
             System.out.println(oponente.getApelido() + " se defendeu! O dano foi reduzido.");
